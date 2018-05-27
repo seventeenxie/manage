@@ -44,7 +44,6 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
-
     class Meta:
         verbose_name = "标签"
         verbose_name_plural = "标签"

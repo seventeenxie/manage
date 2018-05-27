@@ -12,6 +12,7 @@ def index(request):
     return render(request, "king_admin/table_index.html",{'table_list':king_admin.enabled_admins})
 
 
+
 def display_table_objs(request,app_name,table_name):
 
     #models_module = importlib.import_module('%s.models'%(app_name))
@@ -42,11 +43,34 @@ def display_table_objs(request,app_name,table_name):
     return render(request,"king_admin/table_objs.html",{"admin_class":admin_class,
                                                         "orderby_key":orderby_key,
                                                         "query_sets":query_sets,
-                                                        "filter_condtions":filter_condtions})
+                                                        "filter_condtions":filter_condtions,
+                                                        "orderby_key":orderby_key,
+                                                        "previous_orderby": request.GET.get("o",''),
+                                                        "search_text":request.GET.get('_q','')})
+
+
+def table_obj_delete(request,app_name,table_name,obj_id):
+    admin_class = king_admin.enabled_admins[app_name][table_name]
+    objs=[];
+    obj = admin_class.model.objects.get(id=obj_id)
+    objs.append(obj)
+    if request.method == "POST":
+        obj.delete()
+        return redirect("/king_admin/%s/%s/" %(app_name,table_name))
+
+
+
+    return render(request,"king_admin/table_obj_delete.html",{"objs":objs,
+                                                              "admin_class":admin_class,
+                                                              "app_name": app_name,
+                                                              "table_name": table_name
+                                                              })
+
 def table_obj_add(request,app_name,table_name):
     admin_class = king_admin.enabled_admins[app_name][table_name]
+    admin_class.is_add_form = True
     model_form_class = create_model_form(request,admin_class)
-
+    
     if request.method == "POST":
         form_obj = model_form_class(request.POST)  #
         if form_obj.is_valid():
@@ -75,3 +99,6 @@ def table_obj_change(request,app_name,table_name,obj_id):
                                                               "admin_class":admin_class,
                                                               "app_name":app_name,
                                                               "table_name":table_name})
+def test(request):
+   pass
+

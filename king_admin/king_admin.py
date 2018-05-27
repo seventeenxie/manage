@@ -13,6 +13,7 @@ class BaseAdmin(object):
     list_per_page = 20
     ordering = None
     filter_horizontal = []
+    actions = ["delete_selected_objs"]
     readonly_fields = []
 
 class CustomerAdmin(BaseAdmin):
@@ -23,6 +24,15 @@ class CustomerAdmin(BaseAdmin):
 	
 
     #model = models.Customer
+    list_per_page = 5
+    ordering = "qq"
+
+
+
+    actions = ["delete_selected_objs","test"]
+    def test(self,request,querysets):
+        print("in test",)
+    test.display_name  = "测试动作"
 
 class CustomerFollowUpAdmin(BaseAdmin):
     list_display = ('customer','consultant','date')
