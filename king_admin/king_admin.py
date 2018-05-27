@@ -10,14 +10,16 @@ class BaseAdmin(object):
     list_display = []
     list_filters = []
     search_fields = []
-    list_per_page = 1
+    list_per_page = 20
     ordering = None
+    filter_horizontal = []
+    readonly_fields = []
 
 class CustomerAdmin(BaseAdmin):
     list_display = ["id",'qq','name','source','consultant','consult_course','date','status']
     list_filters = ['source','consultant','consult_course','status','date']
     search_fields = ['qq','name',"consultant__name"]
-
+    filter_horizontal = ('tags',)
 	
 
     #model = models.Customer

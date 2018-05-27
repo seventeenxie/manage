@@ -5,20 +5,33 @@
     {{ admin_class.list_display }}
     <div class="panel panel-info">
           <div class="panel-heading">
-            <h3 class="panel-title">Panel title</h3>
+            <h3 class="panel-title">{% get_model_name admin_class %}
+                <a href="{{ request.path }}add/" class="pull-right">Add</a>
+            </h3>
+
           </div>
           <div class="panel-body">
                <div class="row">
                 <form class="" method="get">
-                  {% for condtion in admin_class.list_filters %}
+                  {% for filter_field in admin_class.list_filters %}
                     <div class="col-lg-2">
-                    <span>{{ condtion }}</span>
-                    {% render_filter_ele condtion admin_class filter_condtions %}
+                    <span>{{ filter_field }}</span>
+                    {% render_filter_ele filter_field admin_class filter_condtions %}
                     </div>
 
                   {% endfor %}
 
                     <button type="SUBMIT" class="btn btn-success">检索</button>
+
+                　<hr>
+                  <div class="row">
+                      <div class="col-lg-2"　>
+                        <input type="search" name="_q" class="form-control" style="margin-left:15px" value="{{ search_text }}" placeholder="search by {% for search_field in admin_class.search_fields %}{{ search_field }},{% endfor %} ">
+                      </div>
+                      <div class="col-lg-2"　>
+                        <button type="SUBMIT" class="btn btn-success">search</button>
+                      </div>
+                  </div>
                 </form>
 
                </div>
@@ -32,11 +45,15 @@
                         {% endfor %}
                     </tr>
                   </thead>
+                  <tfoot>
+                    <tr>
+                        <td>总计{{ query_sets.paginator.count }}条</td></tr>
+                  </tfoot>
                   <tbody>
 {#                    {% get_query_sets  admin_class as query_sets %}#}
                     {% for obj in query_sets %}
                     <tr>
-                        {% build_table_row obj admin_class %}
+                        {% build_table_row request obj admin_class %}
                     </tr>
                     {% endfor %}
                   </tbody>
