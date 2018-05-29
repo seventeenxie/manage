@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'king_admin',
-    'crm'
+    'crm',
+    'myadmin'
+
 ]
 
 MIDDLEWARE = [
