@@ -1,22 +1,52 @@
 {% load tags %}
-
-
 {% for app_name,app_tables in table_list.items %}
 
-     <h1> {{ app_name }} </h1>
-    <table class="easyui-datagrid" style="width:100%"
-           data-options="url:'datagrid_data.json',fitColumns:true,singleSelect:true">
+    <h1> {{ app_name }} </h1>
+    <table id="tabledata" class="easyui-datagrid" style="width:100%" data-options="fitColumns:true,singleSelect:true">
         <thead>
         <tr>
-            <th data-options="field:'code',width:100"></th>
+            <th data-options="field:'appname',width:50">数据表</th>
+            <th data-options="field:'link',width:100">链接</th>
         </tr>
         </thead>
         <tbody>
-{% for table_name,admin  in app_tables.items %}
-   {% render_app_name admin %}
-{% endfor %}
+
+        {% for table_name,admin  in app_tables.items %}
+            <tr>
+                <td>
+                    {% render_app_name admin %}
+                </td>
+                <td>
+                    {% url 'table_objs' app_name table_name %}
+                </td>
+            </tr>
+
+        {% endfor %}
         </tbody>
     </table>
-
-
 {% endfor %}
+
+
+<div id="win" class="easyui-window" title="My Window" style="width:50%;height:600px"
+     data-options="iconCls:'icon-save',modal:true,closed:true">
+</div>
+
+</div>
+<script>
+    $('#tabledata').datagrid({
+        onClickCell: function (index, field, value) {
+
+            $('#win').window('open');
+            var row = $('#tabledata').datagrid('getSelected');
+            if (row) {
+                $('#win').window(
+                    {
+                        href: row.link
+                    }
+                )
+                 $('#win').window('open')
+            }
+        }
+    });
+
+</script>
