@@ -1,94 +1,37 @@
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-      <title>通用后台管理</title>
-      <link rel="stylesheet" href="/static/layui/css/layui.css">
-         <script src="/static/layui/layui.js"></script>
-    </head>
-    <body class="layui-layout-body">
-    <div class="layui-layout layui-layout-admin">
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Basic Layout - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+</head>
+<body>
+	<div style="margin:20px 0;"></div>
+	<div class="easyui-layout" style="width:700px;height:350px;">
+		<div data-options="region:'north'" style="height:50px"></div>
+		<div data-options="region:'south',split:true" style="height:50px;"></div>
+		<div data-options="region:'east',split:true" title="East" style="width:100px;"></div>
+		<div data-options="region:'west',split:true" title="West" style="width:100px;"></div>
+		<div data-options="region:'center',title:'Main Title',iconCls:'icon-ok'">
+			<table class="easyui-datagrid"
+					data-options="url:'datagrid_data1.json',method:'get',border:false,singleSelect:true,fit:true,fitColumns:true">
+				<thead>
+					<tr>
+						<th data-options="field:'itemid'" width="80">Item ID</th>
+						<th data-options="field:'productid'" width="100">Product ID</th>
+						<th data-options="field:'listprice',align:'right'" width="80">List Price</th>
+						<th data-options="field:'unitcost',align:'right'" width="80">Unit Cost</th>
+						<th data-options="field:'attr1'" width="150">Attribute</th>
+						<th data-options="field:'status',align:'center'" width="60">Status</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
 
-      <div class="layui-header">
-        <div class="layui-logo">通用后台管理</div>
-        <!-- 头部区域（可配合layui已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left">
-          <li class="layui-nav-item"><a href="">控制台</a></li>
-          <li class="layui-nav-item"><a href="">商品管理</a></li>
-          <li class="layui-nav-item"><a href="">用户</a></li>
-          <li class="layui-nav-item">
-            <a href="javascript:;">其它系统</a>
-            <dl class="layui-nav-child">
-              <dd><a href="">邮件管理</a></dd>
-              <dd><a href="">消息管理</a></dd>
-              <dd><a href="">授权管理</a></dd>
-            </dl>
-          </li>
-        </ul>
-        <ul class="layui-nav layui-layout-right">
-          <li class="layui-nav-item">
-            <a href="javascript:;">
-              <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-              {request.user}
-            </a>
-            <dl class="layui-nav-child">
-              <dd><a href="">基本资料</a></dd>
-              <dd><a href="">安全设置</a></dd>
-            </dl>
-          </li>
-          <li class="layui-nav-item"><a href="">退了</a></li>
-        </ul>
-      </div>
-
-      <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-          <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-          <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-            <li class="layui-nav-item layui-nav-itemed">
-              <a class="" href="javascript:;">数据库管理</a>
-              <dl class="layui-nav-child">
-                <dd><a href="{% url 'table_index1' %}">管理数据库</a></dd>
-                <dd><a href="javascript:;">列表二</a></dd>
-                <dd><a href="javascript:;">列表三</a></dd>
-                <dd><a href="">超链接</a></dd>
-              </dl>
-            </li>
-            <li class="layui-nav-item layui-tab ">
-              <a href="javascript:;">解决方案</a>
-              <dl class="layui-nav-child">
-                <dd class="layui-this"><a href="{% url 'table_index1' %}">列表一</a></dd>
-                <dd><a href="javascript:;">列表二</a></dd>
-                <dd><a href="">超链接</a></dd>
-              </dl>
-            </li>
-            <li class="layui-nav-item"><a href="">云市场</a></li>
-            <li class="layui-nav-item"><a href="">发布商品</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="layui-body">
-
-          {% block body %}
-
-          {% endblock %}
-
-
-      </div>
-
-      <div class="layui-footer">
-        <!-- 底部固定区域 -->
-        © layui.com - 底部固定区域
-      </div>
-    </div>
-
-    <script>
-    //JavaScript代码区域
-    layui.use('element', function(){
-      var element = layui.element;
-
-    });
-    </script>
-    </body>
-    </html>
+</body>
+</html>
