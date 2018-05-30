@@ -4,5 +4,5 @@ from myadmin import views
 
 urlpatterns = [
     url(r'^$', views.index,name="myadmin/index"),
-    url(r'table_index', views.table_index, name="table_index1"),
+    url(r'table_index', views.table_index, name="table_index"),
 ]

@@ -1,37 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Basic Layout - jQuery EasyUI Demo</title>
-	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
-	<link rel="stylesheet" type="text/css" href="../demo.css">
-	<script type="text/javascript" src="../../jquery.min.js"></script>
-	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Basic Layout - jQuery EasyUI Demo</title>
+    <link rel="stylesheet" type="text/css" href="/static/easyui/css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/static/easyui/css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/static/easyui/css/demo.css">
+    <script type="text/javascript" src="/static/easyui/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/easyui/js/jquery.easyui.min.js"></script>
 </head>
-<body>
-	<div style="margin:20px 0;"></div>
-	<div class="easyui-layout" style="width:700px;height:350px;">
-		<div data-options="region:'north'" style="height:50px"></div>
-		<div data-options="region:'south',split:true" style="height:50px;"></div>
-		<div data-options="region:'east',split:true" title="East" style="width:100px;"></div>
-		<div data-options="region:'west',split:true" title="West" style="width:100px;"></div>
-		<div data-options="region:'center',title:'Main Title',iconCls:'icon-ok'">
-			<table class="easyui-datagrid"
-					data-options="url:'datagrid_data1.json',method:'get',border:false,singleSelect:true,fit:true,fitColumns:true">
-				<thead>
-					<tr>
-						<th data-options="field:'itemid'" width="80">Item ID</th>
-						<th data-options="field:'productid'" width="100">Product ID</th>
-						<th data-options="field:'listprice',align:'right'" width="80">List Price</th>
-						<th data-options="field:'unitcost',align:'right'" width="80">Unit Cost</th>
-						<th data-options="field:'attr1'" width="150">Attribute</th>
-						<th data-options="field:'status',align:'center'" width="60">Status</th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-	</div>
+<body class="easyui-layout">
+<div data-options="region:'north',split:true" style="height:50px;"></div>
+<div data-options="region:'south',split:true" style="height:50px;"></div>
+<div data-options="region:'west',title:'系统管理菜单',split:true" style="width:200px;">
+    <ul id="tt" class="easyui-tree">
+        <li>
+            <span>系统管理</span>
+            <ul>
+                <li data-options="id:1,url:'{% url 'table_index' %}'">
+                    <span>数据库管理</span>
+                </li>
+                <li>
+                    <span>File 3</span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div data-options="region:'center'" ,style="background:#eee;">
+    <div id="tabs" class="easyui-tabs" style="width:100%;height:100%;">
+    </div>
+</div>
+
 
 </body>
+
+
+<script>
+    $('#tt').tree(
+        {
+            onClick: function (node) {
+                $('#tabs').tabs('add', {
+                    title:node.text,
+                    href:node.url,
+                    closable: true,
+                    tools: [{
+                        iconCls: 'icon-mini-refresh',
+                        handler: function () {
+                            alert('refresh');
+                        }
+                    }]
+                });
+
+
+            }
+
+        }
+    )
+
+</script>
+
+
 </html>
