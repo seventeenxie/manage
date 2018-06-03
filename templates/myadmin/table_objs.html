@@ -1,1 +1,25 @@
 {% load tags %}
+<table id='table_objects' class="easyui-datagrid" width="100%">
+
+    <thead>
+    <tr>
+        {% for column in admin_class.list_display %}
+            {% build_table_header_column column admin_class %}
+        {% endfor %}
+    </tr>
+    </thead>
+
+
+</table>
+
+<script>
+    $('#table_objects').datagrid({
+        border: false,
+        rownumbers: true,
+        pageList: [10, 20, 30],//选择一页显示多少数据
+        pagination: true,//在DataGrid控件底部显示分页工具栏。
+        url :'{{ request.path }}',          //提交的url地址
+        idField: 'id'
+    });
+
+</script>
