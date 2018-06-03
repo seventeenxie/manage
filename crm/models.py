@@ -8,7 +8,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=32,blank=True,null=True)
     qq = models.CharField(max_length=64,unique=True)
     qq_name = models.CharField(max_length=64,blank=True,null=True)
-    phone = models.CharField(max_length=64,blank=True,null=True)
+    phone = models.CharField(max_length=64,blank=True,null=True,verbose_name='电话')
     source_choices = ((0,'转介绍'),
                       (1,'QQ群'),
                       (2,'官网'),

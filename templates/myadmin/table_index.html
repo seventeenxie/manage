@@ -1,12 +1,13 @@
 {% load tags %}
 {% for app_name,app_tables in table_list.items %}
-
     <h1> {{ app_name }} </h1>
     <table id="tabledata" class="easyui-datagrid" style="width:100%" data-options="fitColumns:true,singleSelect:true">
         <thead>
         <tr>
-            <th data-options="field:'appname',width:50">数据表</th>
+            <th data-options="field:'tablename',width:50">数据表</th>
             <th data-options="field:'link',width:100">链接</th>
+            <th data-options="field:'appname',width:50">应用名</th>
+            <th data-options="field:'table',width:50">表名</th>
         </tr>
         </thead>
         <tbody>
@@ -14,10 +15,16 @@
         {% for table_name,admin  in app_tables.items %}
             <tr>
                 <td>
-                    {% render_app_name admin %}
+                    {% render_app_table_name admin %}
                 </td>
                 <td>
                     {% url 'table_objs' app_name table_name %}
+                </td>
+                <td>
+                    {{ app_name }}
+                </td>
+             <td>
+                    {{ table_name }}
                 </td>
             </tr>
 
@@ -27,26 +34,28 @@
 {% endfor %}
 
 
-<div id="win" class="easyui-window" title="My Window" style="width:50%;height:600px"
+<div id="win" class="easyui-window" style="width:50%;height:600px"
      data-options="iconCls:'icon-save',modal:true,closed:true">
 </div>
 
 </div>
 <script>
     $('#tabledata').datagrid({
-        onClickCell: function (index, field, value) {
-
-            $('#win').window('open');
-            var row = $('#tabledata').datagrid('getSelected');
-            if (row) {
-                $('#win').window(
-                    {
-                        href: row.link
-                    }
-                )
-                 $('#win').window('open')
+            onClickRow: function (index, row) {
+                if (row) {
+                    $('#tabs').tabs('add', {
+                        href: $.trim(row.link),
+                        title: row.appname+'_'+row.tablename,
+                        closable: true,
+                        tools: [{
+                            iconCls: 'icon-mini-refresh',
+                            handler: function () {
+                            }
+                        }]
+                    });
+                }
             }
-        }
-    });
+        },
+    );
 
 </script>

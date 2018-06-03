@@ -8,7 +8,7 @@ register = template.Library()
 import  time
 
 @register.simple_tag
-def render_app_name(admin_class):
+def render_app_table_name(admin_class):
     return admin_class.model._meta.verbose_name
 
 @register.simple_tag
@@ -150,38 +150,17 @@ def render_filter_ele(filter_field,admin_class,filter_condtions):
 
     return mark_safe(select_ele)
 
+
+
 @register.simple_tag
-def  build_table_header_column(column,orderby_key,filter_condtions):
-    filters = ''
-    for k,v in filter_condtions.items():
-        filters += "&%s=%s" %(k,v)
-
-    ele = '''<th><a href="?{filters}&o={orderby_key}">{column}</a>
-    {sort_icon}
-    </th>'''
-    if orderby_key:
-        if orderby_key.startswith("-"):
-            sort_icon = '''<span class="glyphicon glyphicon-chevron-up"></span>'''
-        else:
-            sort_icon = '''<span class="glyphicon glyphicon-chevron-down"></span>'''
-
-        if orderby_key.strip("-") == column: #排序的就是这个字段
-            orderby_key =orderby_key
-        else:
-            orderby_key = column
-            sort_icon = ''
-
-    else:  #没有排序
-        orderby_key = column
-        sort_icon = ''
-
-    ele = ele.format(orderby_key=orderby_key, column=column,sort_icon=sort_icon,filters=filters)
+def  build_table_header_column(column,admin_class):
+    field_verbose_name=admin_class.model._meta.get_field(column).verbose_name
+    ele = '''<th data-options="field:'%s'">%s</th>'''%(column,field_verbose_name)
     return mark_safe(ele )
 
 
 @register.simple_tag
 def get_model_name(admin_class):
-
     return admin_class.model._meta.verbose_name
 
 
