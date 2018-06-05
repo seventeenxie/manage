@@ -153,9 +153,12 @@ def render_filter_ele(filter_field,admin_class,filter_condtions):
 
 
 @register.simple_tag
-def  build_table_header_column(column,admin_class):
-    field_verbose_name=admin_class.model._meta.get_field(column).verbose_name
-    ele = '''<th data-options="field:'%s'">%s</th>'''%(column,field_verbose_name)
+def  build_table_header_column(admin_class):
+    ele='[[ '
+    for column in admin_class.list_display:
+     field_verbose_name=admin_class.model._meta.get_field(column).verbose_name
+     ele = ele+'''{field:'%s',title:'%s',width:80,sortable:true},'''%(column,field_verbose_name)
+    ele = ele+']]'
     return mark_safe(ele )
 
 

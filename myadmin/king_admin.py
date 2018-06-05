@@ -10,7 +10,6 @@ class BaseAdmin(object):
     list_display = []
     list_filters = []
     search_fields = []
-    list_per_page = 20
     ordering = None
     filter_horizontal = []
     actions = ["delete_selected_objs"]
@@ -24,7 +23,6 @@ class CustomerAdmin(BaseAdmin):
 	
 
     #model = models.Customer
-    list_per_page = 5
     ordering = "qq"
 
 

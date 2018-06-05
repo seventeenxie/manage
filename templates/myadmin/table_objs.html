@@ -1,25 +1,40 @@
 {% load tags %}
-<table id='table_objects' class="easyui-datagrid" width="100%">
-
-    <thead>
-    <tr>
-        {% for column in admin_class.list_display %}
-            {% build_table_header_column column admin_class %}
-        {% endfor %}
-    </tr>
-    </thead>
-
-
+<table id='table_objects'>
 </table>
-
 <script>
-    $('#table_objects').datagrid({
-        border: false,
-        rownumbers: true,
-        pageList: [10, 20, 30],//选择一页显示多少数据
-        pagination: true,//在DataGrid控件底部显示分页工具栏。
-        url :'{{ request.path }}',          //提交的url地址
-        idField: 'id'
-    });
+    $('#table_objects').datagrid(
+        {
+            columns:{% build_table_header_column admin_class %},
+            url: '{{request.path }}',
+            pagination: true,
+            pageList: [1, 10, 15, 20, 25],
+            pageSize: 1,
+            toolbar:'#toolbar'
+        }
+    )
+    $('#table_objects').datagrid('getPager').pagination({
+
+        displayMsg: '当前显示从第{from}条到{to}条 共{total}条记录',
+        beforePageText:'页数',
+        afterPageText:'共{pages}页'
+    })
 
 </script>
+
+<div id="toolbar">
+<input id="cc" name="dept" value="aa">
+<input id="cc" name="dept" value="aa">
+    <input id="cc" name="dept" value="aa">
+<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">easyui</a>
+</div>
+
+
+
+
+<select id="cc" class="easyui-combobox" name="dept" style="width:200px;">
+    <option value="aa">aitem1</option>
+    <option>bitem2</option>
+    <option>bitem3</option>
+    <option>ditem4</option>
+    <option>eitem5</option>
+</select>

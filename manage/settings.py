@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'king_admin',
     'crm',
-    'myadmin'
+    'myadmin',
+    'rest_framework'
 
 ]
 
