@@ -22,7 +22,9 @@ def display_table_objs(request,app_name,table_name):
           return render(request, "myadmin/table_objs.html", {"admin_class": admin_class})
     if request.method == 'POST':
         list_per_page=request.POST.get('rows')
-        object_list=admin_class.model.objects.all()
+        object_list= table_filter(request, admin_class)
+        object_list = table_search(request, admin_class, object_list)
+
         paginator = Paginator(object_list, list_per_page)
         total=paginator.count
         page = request.POST.get('page')
@@ -34,8 +36,6 @@ def display_table_objs(request,app_name,table_name):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             query_sets = paginator.page(paginator.num_pages)
-
-        print(query_sets)
         serializer = serializers.create_serializ_model(admin_class)(query_sets, many=True)
         return JsonResponse({"rows":serializer.data,
                                "total":total

@@ -1,6 +1,17 @@
 {% load tags %}
 <table id='table_objects'>
 </table>
+<div id="toolbar" style="margin-top: 10px;margin-bottom: 20px">
+    <form id="form" method="post">
+        {% for filter_field in admin_class.list_filters %}
+            {% render_filter_ele filter_field admin_class %}
+        {% endfor %}
+        <input name='searchText' class="easyui-textbox" data-options="iconCls:'icon-search'" style="width:100px">
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 10px;" onclick="clearForm('form')">清空搜索条件</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 10px;" onclick="formSubmit()">搜索</a>
+    </form>
+</div>
+
 <script>
     $('#table_objects').datagrid(
         {
@@ -8,33 +19,27 @@
             url: '{{request.path }}',
             pagination: true,
             pageList: [1, 10, 15, 20, 25],
-            pageSize: 1,
-            toolbar:'#toolbar'
+            pageSize: {{ admin_class.list_per_page }},
+            toolbar: '#toolbar'
         }
     )
-    $('#table_objects').datagrid('getPager').pagination({
+    formate_Chinee('table_objects')
+    function formSubmit() {
+       postData = getFormdata('form')
+        console.log(postData)
+        $('#table_objects').datagrid({
+            queryParams: postData,
+            pageNumber: 1,
+            displayMsg: '当前显示从第{from}条到{to}条 共{total}条记录',
+            beforePageText: '页数',
+            afterPageText: '共{pages}页'
+        })
+        formate_Chinee('table_objects')
+    }
 
-        displayMsg: '当前显示从第{from}条到{to}条 共{total}条记录',
-        beforePageText:'页数',
-        afterPageText:'共{pages}页'
-    })
 
 </script>
 
-<div id="toolbar">
-<input id="cc" name="dept" value="aa">
-<input id="cc" name="dept" value="aa">
-    <input id="cc" name="dept" value="aa">
-<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">easyui</a>
-</div>
 
 
 
-
-<select id="cc" class="easyui-combobox" name="dept" style="width:200px;">
-    <option value="aa">aitem1</option>
-    <option>bitem2</option>
-    <option>bitem3</option>
-    <option>ditem4</option>
-    <option>eitem5</option>
-</select>

@@ -98,59 +98,23 @@ def render_page_ele(loop_counter,query_sets,filter_condtions):
 
 
 @register.simple_tag
-def render_filter_ele(filter_field,admin_class,filter_condtions):
+def render_filter_ele(filter_field,admin_class):
     #select_ele = '''<select class="form-control" name='%s' ><option value=''>----</option>''' %filter_field
-    select_ele = '''<select class="form-control" name='{filter_field}' ><option value=''>----</option>'''
+
+    select_ele = '''  <select class="easyui-combobox" name="%s" style="width:150px;"><option value=''>----</option>'''%filter_field
     field_obj = admin_class.model._meta.get_field(filter_field)
     if field_obj.choices:
-        selected = ''
         for choice_item in field_obj.choices:
-            if filter_condtions.get(filter_field) == str(choice_item[0]):
-                selected ="selected"
+            select_ele += '''<option value='%s'>%s</option>''' %(choice_item[0],choice_item[1])
 
-            select_ele += '''<option value='%s' %s>%s</option>''' %(choice_item[0],selected,choice_item[1])
-            selected =''
+
 
     if type(field_obj).__name__ == "ForeignKey":
-        selected = ''
         for choice_item in field_obj.get_choices()[1:]:
-            if filter_condtions.get(filter_field) == str(choice_item[0]):
-                selected = "selected"
-            select_ele += '''<option value='%s' %s>%s</option>''' %(choice_item[0],selected,choice_item[1])
-            selected = ''
-    if type(field_obj).__name__ in ['DateTimeField','DateField']:
-        date_els = []
-        today_ele = datetime.now().date()
-        date_els.append(['今天', datetime.now().date()])
-        date_els.append(["昨天",today_ele - timedelta(days=1)])
-        date_els.append(["近7天",today_ele - timedelta(days=7)])
-        date_els.append(["本月",today_ele.replace(day=1)])
-        date_els.append(["近30天",today_ele - timedelta(days=30)])
-        date_els.append(["近90天",today_ele - timedelta(days=90)])
-        date_els.append(["近180天",today_ele - timedelta(days=180)])
-        date_els.append(["本年",today_ele.replace(month=1,day=1)])
-        date_els.append(["近一年",today_ele  - timedelta(days=365)])
+            select_ele += '''<option value='%s' >%s</option>''' %(choice_item[0],choice_item[1])
 
-
-        for item in date_els:
-            selected = ''
-            time=item[1].strftime("%Y-%m-%d")
-            if (filter_condtions.get("%s__gte" % filter_field)) ==time:
-                selected = "selected"
-                print(selected)
-            select_ele += '''<option value='%s' %s>%s</option>''' %(item[1],selected,item[0])
-
-        filter_field_name = "%s__gte" % filter_field
-
-    else:
-        filter_field_name = filter_field
-    select_ele += "</select>"
-
-    select_ele = select_ele.format(filter_field=filter_field_name)
-
+    select_ele = select_ele + '</select>'
     return mark_safe(select_ele)
-
-
 
 @register.simple_tag
 def  build_table_header_column(admin_class):
