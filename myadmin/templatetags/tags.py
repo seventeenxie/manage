@@ -119,9 +119,12 @@ def render_filter_ele(filter_field,admin_class):
 @register.simple_tag
 def  build_table_header_column(admin_class):
     ele='[[ '
+
     for column in admin_class.list_display:
-     field_verbose_name=admin_class.model._meta.get_field(column).verbose_name
-     ele = ele+'''{field:'%s',title:'%s',width:80,sortable:true},'''%(column,field_verbose_name)
+     if(column !='add' and column!='edit'):
+      field_verbose_name=admin_class.model._meta.get_field(column).verbose_name
+      ele = ele+'''{field:'%s',title:'%s',width:80,sortable:true},'''%(column,field_verbose_name)
+    ele = ele + '''  { field: 'edit', title: '编辑', width: 100, align: 'center', formatter: edit_data },'''
     ele = ele+']]'
     return mark_safe(ele )
 

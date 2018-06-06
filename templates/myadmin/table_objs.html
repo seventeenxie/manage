@@ -1,33 +1,63 @@
 {% load tags %}
 <table id='table_objects'>
 </table>
+<div id="win"></div>
 <div id="toolbar" style="margin-top: 10px;margin-bottom: 20px">
     <form id="form" method="post">
         {% for filter_field in admin_class.list_filters %}
             {% render_filter_ele filter_field admin_class %}
         {% endfor %}
         <input name='searchText' class="easyui-textbox" data-options="iconCls:'icon-search'" style="width:100px">
-    <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 10px;" onclick="clearForm('form')">清空搜索条件</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 10px;"
+           onclick="clearForm('form')">清空搜索条件</a>
         <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 10px;" onclick="formSubmit()">搜索</a>
     </form>
 </div>
 
 <script>
+
+
     $('#table_objects').datagrid(
         {
             columns:{% build_table_header_column admin_class %},
             url: '{{request.path }}',
             pagination: true,
-            rownumbers:true,
+            rownumbers: true,
             pageList: [{{ admin_class.list_per_page }}, 10, 15, 20, 25],
             pageSize: {{ admin_class.list_per_page }},
             toolbar: '#toolbar'
         }
     )
+
+    function edit_data(val, rowdata, rowIndex) {
+        str_onclick = "onclick='edit(" + rowdata.id + ")'"
+        return "<input type='button' value='编辑'" + str_onclick + " >"
+    }
+
+    function edit(id) {
+
+        $('#win').window({
+            width: 800,
+            height: 600,
+            modal: true,
+            closed:true,
+            onBeforeOpen:function(){
+                $('#win').window({
+                    title:'{{ app_label }}'+'->'+'{{ table_name }}'+'->'+id
+                    }
+
+                )
+            },
+
+        });
+         $('#win').window('open');
+    }
+
+
     formate_Chinee('table_objects')
+
     function formSubmit() {
-       postData = getFormdata('form')
-        console.log(postData)
+        postData = getFormdata('form')
         $('#table_objects').datagrid({
             queryParams: postData,
             pageNumber: 1,
@@ -37,6 +67,8 @@
         })
         formate_Chinee('table_objects')
     }
+
+
 </script>
 
 

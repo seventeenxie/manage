@@ -9,7 +9,7 @@ from crm import models
 from king_admin.forms import create_model_form,CustomerModelForm
 # Create your views here.
 from . import serializers
-from rest_framework.decorators import api_view
+from rest_framework.renderers import JSONRenderer
 def index(request):
     return  render(request,'myadmin/index.html')
 @csrf_exempt
@@ -17,10 +17,19 @@ def table_index(request):
     return render(request, "myadmin/table_index.html", {'table_list': king_admin.enabled_admins})
 @csrf_exempt
 def display_table_objs(request,app_name,table_name):
-    admin_class = king_admin.enabled_admins[app_name][table_name]
     if request.method =='GET':
-          return render(request, "myadmin/table_objs.html", {"admin_class": admin_class})
+        admin_class = king_admin.enabled_admins[app_name][table_name]
+        app_label=admin_class.model._meta.app_label
+        table_name = admin_class.model._meta.verbose_name
+        return render(request, "myadmin/table_objs.html", {
+            "admin_class": admin_class,
+            "app_label":app_label,
+            'table_name':table_name
+
+        })
     if request.method == 'POST':
+        admin_class = king_admin.enabled_admins[app_name][table_name]
+
         list_per_page=request.POST.get('rows')
         object_list= table_filter(request, admin_class)
         object_list = table_search(request, admin_class, object_list)
@@ -36,6 +45,7 @@ def display_table_objs(request,app_name,table_name):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             query_sets = paginator.page(paginator.num_pages)
+
         serializer = serializers.create_serializ_model(admin_class)(query_sets, many=True)
         return JsonResponse({"rows":serializer.data,
                                "total":total

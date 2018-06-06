@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+
+
 class Customer(models.Model):
     '''客户信息表'''
     name = models.CharField(max_length=32,blank=True,null=True)
@@ -31,6 +33,8 @@ class Customer(models.Model):
     consultant = models.ForeignKey("UserProfile")
     memo = models.TextField(blank=True,null=True)
     date = models.DateTimeField(auto_now_add=True)
+
+
 
     def __str__(self):
         return self.qq

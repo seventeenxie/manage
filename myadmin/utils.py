@@ -5,7 +5,7 @@ from django.db.models import Q
 def table_filter(request,admin_class):
     '''进行条件过滤并返回过滤后的数据'''
     filter_conditions = {}
-    keywords = ['page','rows','searchText']
+    keywords = ['page','rows','searchText','operate']
     for k,v in request.POST.items():
         if k in keywords:#保留的分页关键字 and 排序关键字
             continue
@@ -32,6 +32,6 @@ def table_search(request,admin_class,object_list):
     q_obj.connector = "OR"
     for column in admin_class.search_fields:
         q_obj.children.append(("%s__contains"%column, search_key))
-    print(q_obj)
+
     res = object_list.filter(q_obj)
     return res
