@@ -27,11 +27,11 @@ def table_sort(request,admin_class,objs):
     return res,orderby_key
 
 def table_search(request,admin_class,object_list):
-    search_key = request.POST.get("searchtext","")
+    search_key = request.POST.get("searchText","")
     q_obj = Q()
     q_obj.connector = "OR"
     for column in admin_class.search_fields:
         q_obj.children.append(("%s__contains"%column, search_key))
-
+    print(q_obj)
     res = object_list.filter(q_obj)
     return res
