@@ -18,7 +18,8 @@
             columns:{% build_table_header_column admin_class %},
             url: '{{request.path }}',
             pagination: true,
-            pageList: [1, 10, 15, 20, 25],
+            rownumbers:true,
+            pageList: [{{ admin_class.list_per_page }}, 10, 15, 20, 25],
             pageSize: {{ admin_class.list_per_page }},
             toolbar: '#toolbar'
         }
@@ -36,8 +37,6 @@
         })
         formate_Chinee('table_objects')
     }
-
-
 </script>
 
 
