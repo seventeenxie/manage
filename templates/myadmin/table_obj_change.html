@@ -1,3 +1,55 @@
-
 {% load tags %}
-{{ form_obj }}
+<form id="change_add_table" method="post">
+
+    {% for field in form_obj %}
+        <div>
+            {% if field.field.required %}
+                <label for="{{ field.id_for_label }}" style="color: red">*{{ field.label }}</label>
+            {% else %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% endif %}
+            {% if field.name in admin_class.filter_horizontal %}
+                {% get_m2m_obj_list admin_class field form_obj as m2m_obj_list %}
+                <select name="{{ field.name }}"  id="{{ field.id_for_label }}" multiple="multiple">
+                    {% for obj in m2m_obj_list %}
+
+                           <option ondblclick="MoveElementTo(this,'id_{{ field.name }}_to','id_{{ field.name }}_from')"
+                                value="{{ obj.id }}">{{ obj }}</option>
+                    {% endfor %}
+                </select>
+                {% get_m2m_selected_obj_list form_obj field as selected_obj_list %}
+                <select name="{{ field.name }}__selected"  id="{{ field.id_for_label }}" multiple="multiple">
+                    {% for obj in selected_obj_list %}
+                        <option value="{{ obj.id }}"
+                                ondblclick="MoveElementTo(this,'id_{{ field.name }}_from','id_{{ field.name }}_to')">{{ obj }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                {{ field }}
+            {% endif %}
+        </div>
+    {% endfor %}
+
+
+</form>
+<script>
+    function MoveElementTo(ele, target_id, new_target_id) {
+        var opt_ele = "<option value='" + $(ele).val() + "' ondblclick=MoveElementTo(this,'" + new_target_id + "','" + target_id + "')>" + $(ele).text() + "</option>";
+        // $(ele).off().dblclick($(ele), parent_id)
+        $("#" + target_id).append(opt_ele);
+        $(ele).remove();
+
+    }
+
+    $('#change_add_table').form({
+        url: '{% url 'table_obj_change' app_name table_name obj_id %}',
+        ajax: true,
+        onSubmit: function () {
+        },
+        success: function (data) {
+            if (data.success = 'success') {
+                $.messager.alert('修改成功', '修改成功')
+            }
+        }
+    });
+</script>

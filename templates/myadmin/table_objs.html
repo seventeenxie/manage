@@ -1,7 +1,9 @@
 {% load tags %}
 <table id='table_objects'>
 </table>
-<div id="win"></div>
+<div id="win">
+</div>
+
 <div id="toolbar" style="margin-top: 10px;margin-bottom: 20px">
     <form id="form" method="post">
         {% for filter_field in admin_class.list_filters %}
@@ -11,11 +13,11 @@
         <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 10px;"
            onclick="clearForm('form')">清空搜索条件</a>
         <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 10px;" onclick="formSubmit()">搜索</a>
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" style="margin-left: 10px;" onclick="table_object_add()">添加</a>
     </form>
 </div>
 
 <script>
-
 
     $('#table_objects').datagrid(
         {
@@ -34,19 +36,29 @@
         return "<input type='button' value='编辑'" + str_onclick + " >"
     }
 
+    function table_object_add() {
+
+    }
+
     function edit(id) {
 
         django_url_built = '{% url 'table_obj_change'  app_name table_name '0000000000' %}'
         if (id) {
             django_url_built = django_url_built.replace('0000000000', id);
             $('#win').window({
-
-                            width: 800,
-                            height: 600,
-                            modal: true,
-                            href: django_url_built,
-                            closed:false,
-                            title: '{{ app_label }}' + '->' + '{{ table_verbose_name }}' + '->' + id
+                tools:[{
+                    iconCls:'icon-edit',
+					handler:function(){
+                        $('#change_add_table').form('submit')
+                    }
+				},{
+                }],
+                width: 800,
+                height: 600,
+                modal: true,
+                href: django_url_built,
+                closed: false,
+                title: '{{ app_label }}' + '->' + '{{ table_verbose_name }}' + '->' + id
             });
         }
 
