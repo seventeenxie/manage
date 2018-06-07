@@ -20,10 +20,11 @@ def display_table_objs(request,app_name,table_name):
     if request.method =='GET':
         admin_class = king_admin.enabled_admins[app_name][table_name]
         app_label=admin_class.model._meta.app_label
-        table_name = admin_class.model._meta.verbose_name
+        table_verbose_name = admin_class.model._meta.verbose_name
         return render(request, "myadmin/table_objs.html", {
             "admin_class": admin_class,
-            "app_label":app_label,
+            "app_name":app_name,
+            'table_verbose_name':table_verbose_name,
             'table_name':table_name
 
         })
@@ -51,4 +52,20 @@ def display_table_objs(request,app_name,table_name):
                                "total":total
                              },safe=False)
 
+def table_obj_change(request,app_name,table_name,obj_id):
 
+    admin_class = king_admin.enabled_admins[app_name][table_name]
+    model_form_class = create_model_form(request,admin_class)
+
+    obj = admin_class.model.objects.get(id=obj_id)
+    if request.method == "POST":
+        form_obj = model_form_class(request.POST,instance=obj)
+        if form_obj.is_valid():
+            form_obj.save()
+    else:
+        form_obj = model_form_class(instance=obj)
+
+    return render(request,"myadmin/table_obj_change.html",{"form_obj":form_obj,
+                                                              "admin_class":admin_class,
+                                                              "app_name":app_name,
+                                                              "table_name":table_name})

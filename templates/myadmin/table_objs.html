@@ -36,21 +36,20 @@
 
     function edit(id) {
 
-        $('#win').window({
-            width: 800,
-            height: 600,
-            modal: true,
-            closed:true,
-            onBeforeOpen:function(){
-                $('#win').window({
-                    title:'{{ app_label }}'+'->'+'{{ table_name }}'+'->'+id
-                    }
+        django_url_built = '{% url 'table_obj_change'  app_name table_name '0000000000' %}'
+        if (id) {
+            django_url_built = django_url_built.replace('0000000000', id);
+            $('#win').window({
 
-                )
-            },
+                            width: 800,
+                            height: 600,
+                            modal: true,
+                            href: django_url_built,
+                            closed:false,
+                            title: '{{ app_label }}' + '->' + '{{ table_verbose_name }}' + '->' + id
+            });
+        }
 
-        });
-         $('#win').window('open');
     }
 
 
