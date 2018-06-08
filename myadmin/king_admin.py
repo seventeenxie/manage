@@ -24,7 +24,7 @@ class CustomerAdmin(BaseAdmin):
 	
 
     #model = models.Customer
-    list_per_page = 2
+    list_per_page = 20
     ordering = "qq"
 
 
