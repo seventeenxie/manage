@@ -125,6 +125,7 @@ def  build_table_header_column(admin_class):
       field_verbose_name=admin_class.model._meta.get_field(column).verbose_name
       ele = ele+'''{field:'%s',title:'%s',width:80,sortable:true},'''%(column,field_verbose_name)
     ele = ele + '''  { field: 'edit', title: '编辑', width: 100, align: 'center', formatter: edit_data },'''
+    ele = ele + '''  { field: 'delete', title: '删除', width: 100, align: 'center', formatter: delete_data},'''
     ele = ele+']]'
     return mark_safe(ele )
 

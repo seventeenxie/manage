@@ -44,20 +44,18 @@
     }
 
     $('#change_add_table').form({
-        url: '{% url 'table_obj_change' app_name table_name obj_id %}',
+        url: '{% url 'table_obj_add' app_name table_name %}',
         ajax: true,
         onSubmit: function () {
               $("select[tag='chosen_list'] option").each(function () {
-            $(this).prop("selected",true);
+              $(this).prop("selected",true);
         })
-
-        //remove all disabled attrs
         $("form").find("[disabled]").removeAttr("disabled") ;
         },
         success: function (data) {
             if (data.success = 'success') {
-                $.messager.alert('修改成功', '修改成功')
-                 $('#table_objects').datagrid('reload',{ })
+                $.messager.alert('添加成功', '添加成功')
+                $('#table_objects').datagrid('reload',{ })
             }
         }
     });

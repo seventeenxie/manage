@@ -58,7 +58,7 @@ def display_table_objs(request, app_name, table_name):
                              "total": total
                              }, safe=False)
 
-
+@csrf_exempt
 def table_obj_change(request, app_name, table_name, obj_id):
     admin_class = king_admin.enabled_admins[app_name][table_name]
     model_form_class = create_model_form(request, admin_class)
@@ -73,16 +73,13 @@ def table_obj_change(request, app_name, table_name, obj_id):
             })
     else:
         form_obj = model_form_class(instance=obj)
-        for field in form_obj:
-            print(dir(field.field))
         return render(request, "myadmin/table_obj_change.html", {"form_obj": form_obj,
                                                                  "admin_class": admin_class,
                                                                  "app_name": app_name,
                                                                  "table_name": table_name,
                                                                  "obj_id": obj_id
                                                                  })
-
-
+@csrf_exempt
 def table_obj_add(request, app_name, table_name):
     admin_class = king_admin.enabled_admins[app_name][table_name]
     admin_class.is_add_form = True
@@ -92,6 +89,28 @@ def table_obj_add(request, app_name, table_name):
         form_obj = model_form_class(request.POST)  #
         if form_obj.is_valid():
             form_obj.save()
-            return redirect(request.path.replace("/add/", "/"))
+            return JsonResponse({
+                'success': "success"
+            })
     else:
         form_obj = model_form_class()
+        return render(request, "myadmin/table_obj_add.html", {"form_obj": form_obj,
+                                                              "app_name": app_name,
+                                                              "table_name": table_name,
+                                                              'admin_class':admin_class
+                                                              })
+
+def table_obj_delete(request, app_name, table_name, obj_id):
+        admin_class = king_admin.enabled_admins[app_name][table_name]
+        objs = [];
+        obj = admin_class.model.objects.get(id=obj_id)
+        objs.append(obj)
+        if request.method == "POST":
+            obj.delete()
+            return redirect("/king_admin/%s/%s/" % (app_name, table_name))
+
+        return render(request, "myadmin/table_obj_delete.html", {"objs": objs,
+                                                                    "admin_class": admin_class,
+                                                                    "app_name": app_name,
+                                                                    "table_name": table_name
+                                                                    })

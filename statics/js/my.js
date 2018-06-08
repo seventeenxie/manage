@@ -1,10 +1,7 @@
 //清空表单数据
 function clearForm(id) {
-        $(':input',"#"+id)
-            .not(':button, :submit, :reset, :hidden')
-            .val('')
-            .removeAttr('checked')
-            .removeAttr('selected');
+      $("#"+id).find("input[name!='type']").val('');
+      alert('waiting for perfect')
     }
     //获取表单数据
  function getFormdata(id) {

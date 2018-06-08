@@ -13,7 +13,8 @@
         <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 10px;"
            onclick="clearForm('form')">清空搜索条件</a>
         <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="margin-left: 10px;" onclick="formSubmit()">搜索</a>
-    <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" style="margin-left: 10px;" onclick="table_object_add()">添加</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" style="margin-left: 10px;"
+           onclick="table_object_add()">添加</a>
     </form>
 </div>
 
@@ -32,33 +33,75 @@
     )
 
     function edit_data(val, rowdata, rowIndex) {
-        str_onclick = "onclick='edit(" + rowdata.id + ")'"
+        str_onclick = "onclick='on_edit_data(" + rowdata.id + ")'"
         return "<input type='button' value='编辑'" + str_onclick + " >"
+    }
+
+    function delete_data(val, rowdata, rowIndex) {
+        str_onclick = "onclick='on_delete_data(" + rowdata.id + ")'"
+        return "<input type='button' value='删除'" + str_onclick + " >"
     }
 
     function table_object_add() {
 
+        django_url_built = '{% url 'table_obj_add'  app_name table_name  %}'
+        $('#win').window({
+            tools: [{
+                iconCls: 'icon-add',
+                handler: function () {
+                    $('#change_add_table').form('submit')
+                }
+            }],
+            width: 500,
+            height: 500,
+            modal: true,
+            href: django_url_built,
+            closed: false,
+            title: '{{ app_name }}' + '->' + '{{ table_verbose_name }}' + '->' + '添加'
+
+
+        })
     }
 
-    function edit(id) {
+    function on_delete_data(id){
+  django_url_built = '{% url 'table_obj_delete'  app_name table_name '0000000000' %}'
+        if (id) {
+            django_url_built = django_url_built.replace('0000000000', id);
+            $('#win').window({
+                tools: [{
+                    iconCls: 'icon-delete',
+                    handler: function () {
+                        $('#change_add_table').form('submit')
+                    }
+                }, {}],
+                width: 500,
+                height: 500,
+                modal: true,
+                href: django_url_built,
+                closed: false,
+                title: '删除+'+'{{ app_name }}' + '->' + '{{ table_verbose_name }}' + '->' + id
+            });
+        }
+    }
+
+    function on_edit_data(id) {
 
         django_url_built = '{% url 'table_obj_change'  app_name table_name '0000000000' %}'
         if (id) {
             django_url_built = django_url_built.replace('0000000000', id);
             $('#win').window({
-                tools:[{
-                    iconCls:'icon-edit',
-					handler:function(){
+                tools: [{
+                    iconCls: 'icon-edit',
+                    handler: function () {
                         $('#change_add_table').form('submit')
                     }
-				},{
-                }],
-                width: 800,
-                height: 600,
+                }, {}],
+                width: 500,
+                height: 500,
                 modal: true,
                 href: django_url_built,
                 closed: false,
-                title: '{{ app_label }}' + '->' + '{{ table_verbose_name }}' + '->' + id
+                title: '{{ app_name }}' + '->' + '{{ table_verbose_name }}' + '->' + id
             });
         }
 
