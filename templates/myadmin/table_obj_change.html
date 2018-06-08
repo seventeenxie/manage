@@ -10,18 +10,15 @@
             {% endif %}
             {% if field.name in admin_class.filter_horizontal %}
                 {% get_m2m_obj_list admin_class field form_obj as m2m_obj_list %}
-                <select name="{{ field.name }}"  id="{{ field.id_for_label }}" multiple="multiple">
+                <select   id="id_{{ field.name }}_from" multiple="multiple">
                     {% for obj in m2m_obj_list %}
-
-                           <option ondblclick="MoveElementTo(this,'id_{{ field.name }}_to','id_{{ field.name }}_from')"
-                                value="{{ obj.id }}">{{ obj }}</option>
+                           <option ondblclick="MoveElementTo(this,'id_{{ field.name }}_to','id_{{ field.name }}_from')" value="{{ obj.id }}">{{ obj }}</option>
                     {% endfor %}
                 </select>
                 {% get_m2m_selected_obj_list form_obj field as selected_obj_list %}
-                <select name="{{ field.name }}__selected"  id="{{ field.id_for_label }}" multiple="multiple">
+                <select name="{{ field.name }}"  id="id_{{ field.name }}_to" multiple="multiple" tag="chosen_list">
                     {% for obj in selected_obj_list %}
-                        <option value="{{ obj.id }}"
-                                ondblclick="MoveElementTo(this,'id_{{ field.name }}_from','id_{{ field.name }}_to')">{{ obj }}</option>
+                        <option value="{{ obj.id }}" ondblclick="MoveElementTo(this,'id_{{ field.name }}_from','id_{{ field.name }}_to')">{{ obj }}</option>
                     {% endfor %}
                 </select>
             {% else %}
@@ -45,6 +42,12 @@
         url: '{% url 'table_obj_change' app_name table_name obj_id %}',
         ajax: true,
         onSubmit: function () {
+              $("select[tag='chosen_list'] option").each(function () {
+            $(this).prop("selected",true);
+        })
+
+        //remove all disabled attrs
+        $("form").find("[disabled]").removeAttr("disabled") ;
         },
         success: function (data) {
             if (data.success = 'success') {
