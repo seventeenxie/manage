@@ -99,15 +99,16 @@ def table_obj_add(request, app_name, table_name):
                                                               "table_name": table_name,
                                                               'admin_class':admin_class
                                                               })
-
+@csrf_exempt
 def table_obj_delete(request, app_name, table_name, obj_id):
         admin_class = king_admin.enabled_admins[app_name][table_name]
         objs = [];
         obj = admin_class.model.objects.get(id=obj_id)
+        print(obj)
         objs.append(obj)
         if request.method == "POST":
             obj.delete()
-            return redirect("/king_admin/%s/%s/" % (app_name, table_name))
+            return  JsonResponse({'success':'successs'})
 
         return render(request, "myadmin/table_obj_delete.html", {"objs": objs,
                                                                     "admin_class": admin_class,
