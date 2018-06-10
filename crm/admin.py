@@ -12,7 +12,7 @@ class CustomerAdmin(admin.ModelAdmin):
     list_per_page = 1
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user','name')
+    list_display = ('id','name')
 
 admin.site.register(models.Customer,CustomerAdmin)
 admin.site.register(models.CustomerFollowUp)

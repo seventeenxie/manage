@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import (
+    BaseUserManager, AbstractBaseUser
+)
 # Create your models here.
 
 
@@ -207,14 +210,95 @@ class Payment(models.Model):
     class Meta:
         verbose_name_plural = "缴费记录"
 
-class UserProfile(models.Model):
-    '''账号表'''
-    user = models.OneToOneField(User)
-    name = models.CharField(max_length=32)
-    roles = models.ManyToManyField("Role",blank=True,null=True)
+# class UserProfile(models.Model):
+#     '''账号表'''
+#     user = models.OneToOneField(User)
+#     name = models.CharField(max_length=32)
+#     roles = models.ManyToManyField("Role",blank=True,null=True)
+#
+#     def __str__(self):
+#         return self.name
 
-    def __str__(self):
-        return self.name
+class UserProfileManager(BaseUserManager):
+    def create_user(self, email, name, password=None):
+        """
+        Creates and saves a User with the given email, date of
+        birth and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+            name=name,
+        )
+
+        user.set_password(password)
+        self.is_active = True
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self,email, name, password):
+        """
+        Creates and saves a superuser with the given email, date of
+        birth and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+            name=name,
+        )
+        user.is_active = True
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+
+class UserProfile(AbstractBaseUser):
+    '''账号表'''
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+        null=True
+    )
+    name = models.CharField(max_length=32)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    objects = UserProfileManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
+
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def get_short_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
+
+
 
 class Role(models.Model):
     '''角色表'''
