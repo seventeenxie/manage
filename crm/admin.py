@@ -13,7 +13,6 @@ class CustomerAdmin(admin.ModelAdmin):
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('id','name')
-
 admin.site.register(models.Customer,CustomerAdmin)
 admin.site.register(models.CustomerFollowUp)
 admin.site.register(models.Enrollment)

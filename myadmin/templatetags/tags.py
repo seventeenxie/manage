@@ -106,12 +106,11 @@ def render_filter_ele(filter_field,admin_class):
     if field_obj.choices:
         for choice_item in field_obj.choices:
             select_ele += '''<option value='%s'>%s</option>''' %(choice_item[0],choice_item[1])
-
-
-
     if type(field_obj).__name__ == "ForeignKey":
-        for choice_item in field_obj.get_choices()[1:]:
-            select_ele += '''<option value='%s' >%s</option>''' %(choice_item[0],choice_item[1])
+       print(dir(field_obj.get_choices()) )
+        # for choice_item in field_obj.get_choices()[1:]:
+        #     print('ffdfdsfds')
+            # select_ele += '''<option value='%s' >%s</option>''' %(choice_item[0],choice_item[1])
 
     select_ele = select_ele + '</select>'
     return mark_safe(select_ele)
